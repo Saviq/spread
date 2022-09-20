@@ -33,4 +33,4 @@ parts:
           #          - git
           #        go-channel: 1.12/stable
           #        go-packages:
-          #            - github.com/RAOF/spread/cmd/spread
+          #            - github.com/Saviq/spread/cmd/spread
