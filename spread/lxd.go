@@ -113,12 +113,23 @@ func (s *lxdServer) Prepare(ctx context.Context) error {
 	args := []string{"exec", s.d.Name, "--"}
 	args = append(args, sshInstallCommand(s.Distro())...)
 
-
-	output, err := exec.Command("lxc", args...).CombinedOutput()
-	if err != nil {
-		printf("Command output: %s", output)
-		s.Discard(ctx)
-		return err
+	debugf("Trying Prepare with: lxc %v", args)
+	it := 1
+	var output []byte
+	var err error
+	for true {
+		output, err = exec.Command("lxc", args...).CombinedOutput()
+		if err == nil {
+		    debugf("Prepared, output: %s", output)
+		    break
+		}
+		debugf("Failed, output: %s", output)
+		if it >= 60 {
+			s.Discard(ctx)
+			return err
+		}
+		time.Sleep(time.Second)
+		it++
 	}
 
 	err = s.p.tuneSSH(s.d.Name, s.Distro())
