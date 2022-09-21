@@ -20,6 +20,12 @@ apps:
         plugs: [home, network, network-bind, lxd]
 
 parts:
+    lxc:
+        plugin: nil
+        stage-snaps:
+        - lxd
+        prime:
+        - bin/lxc
     spread:
         plugin: go
         source: .
@@ -28,5 +34,3 @@ parts:
           #        go-channel: 1.12/stable
           #        go-packages:
           #            - github.com/RAOF/spread/cmd/spread
-        stage-packages:
-            - lxd-client
